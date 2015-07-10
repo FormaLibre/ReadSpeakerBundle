@@ -1,0 +1,4 @@
+readspeaker_controller:
+    resource: "@FormaLibreReadSpeakerBundle/Controller/ReadSpeakerController.php"
+    type: annotation
+    prefix: /

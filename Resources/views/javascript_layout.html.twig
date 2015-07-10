@@ -1,0 +1,52 @@
+<script src="http://f1.eu.readspeaker.com/script/5/ReadSpeaker.js?pids=embhl" type="text/javascript"></script>
+<script>
+(function () {
+    var lang = 'fr_fr';
+    var speaker = 'Thomas';
+    //
+
+    'use strict';
+    var button =
+    '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">' +
+    '<a rel="nofollow" class="rsbtn_play" accesskey="L" title="Utiliser readspeaker" href="http://app.eu.readspeaker.com/cgi-bin/rsent?customerid=5&amp;'
+    + 'lang=' + lang +'&amp;voice=' + speaker + '&amp;readid=[READID]&amp;url=[ENCODED_URL]">'+
+    '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Écouter</span></span></span>' +
+    '<span class="rsbtn_right rsimg rsplay rspart"></span>' +
+    '</a></div>';
+    var tinymce = window.tinymce;
+
+    //tinymce.PluginManager.requireLangPack('inwicast', 'en,fr_FR');
+    tinymce.PluginManager.add('readspeaker', function(editor, url) {
+
+        editor.addButton('readspeaker', {
+            tooltip: "Read speaker",
+            icon: "none fa fa-volume-up",
+            onclick: function() {
+                editor.windowManager.open({
+                    title: 'Readspaker url',
+                    body: [
+                        {type: 'textbox', name: 'url', label: 'Url'},
+                        {type: 'textbox', name: 'div_id', label: 'Div_id'}
+                    ],
+                    width: 320,
+                    height: 180,
+                    onsubmit: function(e) {
+                        button = button.replace("[ENCODED_URL]", e.data.url);
+                        button = button.replace("[READID]", e.data.div_id);
+                        var content = editor.getContent();
+                        content = button + '<div id="' + e.data.div_id + '">' + content + '</div>';
+                        editor.setContent(content);
+                    }
+
+                });
+            }
+        });
+
+
+        //console.log(Routing.generate("inwicast_mediacenter_user_videos_tinymce",{}, true));
+    });
+
+    tinymce.claroline.plugins.readspeaker = true;
+
+}());
+</script>
