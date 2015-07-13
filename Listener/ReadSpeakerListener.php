@@ -7,6 +7,8 @@ use Claroline\CoreBundle\Event\InjectJavascriptEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\DiExtraBundle\Annotation as DI;
+use Claroline\CoreBundle\Event\PluginOptionsEvent;
+use FormaLibre\ReadSpeakerBundle\Form\ConfigureType;
 
 /**
  * @DI\Service("formalibre.listener.read_speaker_listener")
@@ -14,6 +16,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 class ReadSpeakerListener
 {
     private $templating;
+    private $container;
 
     /**
      * @DI\InjectParams({
@@ -23,6 +26,7 @@ class ReadSpeakerListener
     public function __construct(
         ContainerInterface $container
     ) {
+        $this->container = $container;
         $this->templating = $container->get('templating');
     }
 
@@ -43,12 +47,20 @@ class ReadSpeakerListener
     }
 
     /**
-     * @DI\Observe("plugin_options_clarolinepluginbundle")
+     * @DI\Observe("plugin_options_readspeakerbundle")
      */
     public function onPluginConfigure(PluginOptionsEvent $event)
     {
-        $content = 'lets configure this shit !';
-
+        $form = $this->container->get('form.factory')->create(new ConfigureType(
+            $this->container->get('claroline.config.platform_config_handler')->getParameter('readspeaker_client_id')
+        ));
+        
+        $content = $this->templating->render(
+            'FormaLibreReadSpeakerBundle:ReadSpeaker:form.html.twig',
+            array(
+                'form' => $form->createView()
+            )
+        );
         $event->setResponse(new Response($content));
         $event->stopPropagation();
     }

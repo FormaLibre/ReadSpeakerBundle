@@ -1,0 +1,50 @@
+{#
+ # This file is part of the Inwicast plugin for Claroline Connect.
+ #
+ # (c) Claroline
+ #
+ # For the full copyright and license information, please view the LICENSE
+ # file that was distributed with this source code.
+ #}
+
+{% extends "ClarolineCoreBundle:Administration:layout.html.twig" %}
+
+{% block title %}{{ parent() ~ ' - ' ~ 'packages' | trans({}, 'platform') | striptags | raw }}
+    {{ ' - ' ~ 'readspeaker' | trans({}, 'readspeaker') | striptags | raw }}{% endblock %}
+
+{% block breadcrumb %}
+    {{ macros.breadcrumbs(
+        [
+            {
+                'icon': 'icon-cog',
+                'name': 'administration'|trans({}, 'platform'),
+                'href': path('claro_admin_index')
+            },
+            {
+                'name': 'packages'|trans({}, 'platform'),
+                'href': path('claro_admin_open_tool', {'toolName': 'platform_packages'})
+            },
+            {
+                'name': 'readspeaker'|trans({}, 'readspeaker'),
+                'href': ''
+            }
+        ]
+    )}}
+{% endblock %}
+
+{% block section_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ 'readspeaker' | trans({}, 'readspeaker') }}</h3>
+    </div>
+    <form action="{{ path('formalibre_readspeaker_client_id') }}" method="POST">
+        <div class="panel-body">
+            {{ form_widget(form) }}
+        </div>
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-primary">{{ 'ok'|trans({}, 'platform') }}</button>
+            <a class="btn btn-default" href="{{ path('claro_admin_open_tool', {'toolName': 'platform_packages'}) }}" role="button">
+                {{ 'cancel'|trans({}, 'platform') }}
+            </a>
+        </div>
+    </form>
+{% endblock %}
