@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use JMS\DiExtraBundle\Annotation as DI;
 use Claroline\CoreBundle\Event\PluginOptionsEvent;
 use FormaLibre\ReadSpeakerBundle\Form\ConfigureType;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 /**
  * @DI\Service("formalibre.listener.read_speaker_listener")
@@ -54,7 +55,7 @@ class ReadSpeakerListener
         $form = $this->container->get('form.factory')->create(new ConfigureType(
             $this->container->get('claroline.config.platform_config_handler')->getParameter('readspeaker_client_id')
         ));
-        
+
         $content = $this->templating->render(
             'FormaLibreReadSpeakerBundle:ReadSpeaker:form.html.twig',
             array(
@@ -64,4 +65,22 @@ class ReadSpeakerListener
         $event->setResponse(new Response($content));
         $event->stopPropagation();
     }
+
+    /**
+     * @DI\Observe("kernel.response")
+     *
+     * Update the content returned... we look for the [ENCODED_URL] and update it by the current url...
+     *
+     * @param GetResponseEvent $event
+     */
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        $response = $event->getResponse();
+        $url = $this->container->get('request')->getUri();
+        $content = $response->getContent();
+        $content = str_replace('[ENCODED_URL]', $url, $content);
+
+        $response->setContent($content);
+    }
+
 }
