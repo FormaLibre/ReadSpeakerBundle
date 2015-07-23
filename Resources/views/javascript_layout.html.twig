@@ -33,11 +33,10 @@
                     onsubmit: function(e) {
                         button = button.replace("[ENCODED_URL]", e.data.url);
                         button = button.replace("[READID]", e.data.div_id);
-                        var content = editor.getContent();
+                        var content = editor.selection.getContent();
                         content = button + '<div id="' + e.data.div_id + '">' + content + '</div>';
-                        editor.setContent(content);
+                        editor.selection.setContent(content);
                     }
-
                 });
             }
         });
