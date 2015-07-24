@@ -76,7 +76,9 @@ class ReadSpeakerListener
     public function onKernelResponse(FilterResponseEvent $event)
     {
         $response = $event->getResponse();
-        $url = $this->container->get('request')->getUri();
+        $stack = $this->container->get('request_stack');
+        $master = $stack->getMasterRequest();
+        $url = $master->getUri();
         $content = $response->getContent();
         $content = str_replace('[ENCODED_URL]', $url, $content);
 
