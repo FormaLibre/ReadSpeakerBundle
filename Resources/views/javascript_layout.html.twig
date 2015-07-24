@@ -26,7 +26,7 @@
                 var currentButton = button;
                 var divid = Math.random().toString(36).substring(7);
                 currentButton = currentButton.replace("[READID]", divid);
-                currentButton = currentButton.replace("ENCODED_URL", '[' + 'ENCODED_URL]' + ']');
+                currentButton = currentButton.replace("ENCODED_URL", '[' + 'ENCODED_URL' + ']');
                 var content = editor.selection.getContent();
                 content = currentButton + '<div id="' + divid + '">' + content + '</div>';
                 editor.selection.setContent(content);;
