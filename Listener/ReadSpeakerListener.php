@@ -80,7 +80,15 @@ class ReadSpeakerListener
         $master = $stack->getMasterRequest();
         $url = $master->getUri();
         $content = $response->getContent();
+
+        $content = preg_replace(
+            "/(<form)(.*)(\[ENCODED_URL\])(.*)(<\/form>)/s",
+            '${1}${2}[TEMP_URL]${4}${5}',
+            $content
+        );
+
         $content = str_replace('[ENCODED_URL]', $url, $content);
+        $content = str_replace('[TEMP_URL]', '[ENCODED_URL]', $content);
 
         $response->setContent($content);
     }
