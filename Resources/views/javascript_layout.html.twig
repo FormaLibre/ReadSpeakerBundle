@@ -70,7 +70,7 @@
     tinymce.claroline.init.replacespeaker = function(editor) {
         console.debug('replace');
         var content = editor.getContent();
-        content = content.replace(/url=(.*)"/, 'url=[' + 'ENCODED_URL' + ']');
+        content = content.replace(/url=([^"]+)"/, 'url=[' + 'ENCODED_URL' + ']"');
         editor.setContent(content);
     }
 }());
