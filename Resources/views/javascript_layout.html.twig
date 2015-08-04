@@ -18,7 +18,6 @@
 
     //tinymce.PluginManager.requireLangPack('inwicast', 'en,fr_FR');
     tinymce.PluginManager.add('readspeakershow', function(editor, url) {
-
         editor.addButton('readspeakershow', {
             tooltip: "Read speaker",
             icon: "none fa fa-volume-up",
@@ -39,7 +38,6 @@
                 }
             }
         });
-        //console.log(Routing.generate("inwicast_mediacenter_user_videos_tinymce",{}, true));
     });
 
     //tinymce.PluginManager.requireLangPack('inwicast', 'en,fr_FR');
@@ -68,5 +66,12 @@
 
     tinymce.claroline.plugins.readspeakershow = true;
     tinymce.claroline.plugins.readspeakerhide = true;
+
+    tinymce.claroline.init.replacespeaker = function(editor) {
+        console.debug('replace');
+        var content = editor.getContent();
+        content = content.replace(/url=(.*)"/, 'url=[' + 'ENCODED_URL' + ']');
+        editor.setContent(content);
+    }
 }());
 </script>

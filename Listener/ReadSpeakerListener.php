@@ -81,17 +81,7 @@ class ReadSpeakerListener
         $url = $master->getUri();
         $content = $response->getContent();
         $rewrite = $this->container->get('claroline.config.platform_config_handler')->getParameter('readspeaker_url_edit_rewrite');
-
-        if ($rewrite) {
-            $content = preg_replace(
-                '/<form\s*(((?!<form|url=\[ENCODED_URL\]).)+)(url=\[ENCODED_URL\])\s*(((?!form>).)+)form>/s',
-                '<form$1$2url=[TEMP_url]$4form>',
-                $content
-            );
-        }
-
-        $content = str_replace('[ENCODED_URL]', $url, $content);
-        if ($rewrite) $content = str_replace('[TEMP_URL]', '[ENCODED_URL]', $content);
+        if ($rewrite) $content = str_replace('[ENCODED_URL]', $url,  $content);
 
         $response->setContent($content);
     }
