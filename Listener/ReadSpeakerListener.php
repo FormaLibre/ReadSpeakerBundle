@@ -84,8 +84,8 @@ class ReadSpeakerListener
 
         if ($rewrite) {
             $content = preg_replace(
-                "/(<form)(.*)(\[ENCODED_URL\])(.*)(<\/form>)/s",
-                '${1}${2}[TEMP_URL]${4}${5}',
+                '/<form\s*(((?!<form|url=\[ENCODED_URL\]).)+)(url=\[ENCODED_URL\])\s*(((?!form>).)+)form>/s',
+                '<form$1$2url=[TEMP_url]$4form>',
                 $content
             );
         }
