@@ -17,9 +17,8 @@
     var tinymce = window.tinymce;
 
     //tinymce.PluginManager.requireLangPack('inwicast', 'en,fr_FR');
-    tinymce.PluginManager.add('readspeaker', function(editor, url) {
-
-        editor.addButton('readspeaker', {
+    tinymce.PluginManager.add('readspeakershow', function(editor, url) {
+        editor.addButton('readspeakershow', {
             tooltip: "Read speaker",
             icon: "none fa fa-volume-up",
             onclick: function() {
@@ -28,15 +27,51 @@
                 currentButton = currentButton.replace("[READID]", divid);
                 currentButton = currentButton.replace("ENCODED_URL", '[' + 'ENCODED_URL' + ']');
                 var content = editor.selection.getContent();
-                content = currentButton + '<div id="' + divid + '">' + content + '</div>';
-                editor.selection.setContent(content);;
+
+                if (content !== '') {
+                    content = currentButton + '<div id="' + divid + '">' + content + '</div>';
+                    editor.selection.setContent(content);
+                } else {
+                    content = editor.getContent();
+                    content = currentButton + '<div id="' + divid + '">' + content + '</div>';
+                    editor.setContent(content);
+                }
             }
         });
-
-        //console.log(Routing.generate("inwicast_mediacenter_user_videos_tinymce",{}, true));
     });
 
-    tinymce.claroline.plugins.readspeaker = true;
+    //tinymce.PluginManager.requireLangPack('inwicast', 'en,fr_FR');
+    tinymce.PluginManager.add('readspeakerhide', function(editor, url) {
+        editor.addButton('readspeakerhide', {
+            tooltip: "Read speaker hide",
+            icon: "none fa fa-volume-down",
+            onclick: function() {
+                var currentButton = button;
+                var divid = Math.random().toString(36).substring(7);
+                currentButton = currentButton.replace("[READID]", divid);
+                currentButton = currentButton.replace("ENCODED_URL", '[' + 'ENCODED_URL' + ']');
+                var content = editor.selection.getContent();
 
+                if (content !== '') {
+                    content = currentButton + '<div style="display: none;" id="' + divid + '">' + content + '</div>';
+                    editor.selection.setContent(content);
+                } else {
+                    content = editor.getContent();
+                    content = currentButton + '<div style="display: none;" id="' + divid + '">' + content + '</div>';
+                    editor.setContent(content);
+                }
+            }
+        });
+    });
+
+    tinymce.claroline.plugins.readspeakershow = true;
+    tinymce.claroline.plugins.readspeakerhide = true;
+
+    tinymce.claroline.init.replacespeaker = function(editor) {
+        console.debug('replace');
+        var content = editor.getContent();
+        content = content.replace(/url=([^"]+)"/, 'url=[' + 'ENCODED_URL' + ']"');
+        editor.setContent(content);
+    }
 }());
 </script>

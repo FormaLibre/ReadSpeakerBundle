@@ -80,7 +80,8 @@ class ReadSpeakerListener
         $master = $stack->getMasterRequest();
         $url = $master->getUri();
         $content = $response->getContent();
-        $content = str_replace('[ENCODED_URL]', $url, $content);
+        $rewrite = $this->container->get('claroline.config.platform_config_handler')->getParameter('readspeaker_url_edit_rewrite');
+        if ($rewrite) $content = str_replace('[ENCODED_URL]', $url,  $content);
 
         $response->setContent($content);
     }
