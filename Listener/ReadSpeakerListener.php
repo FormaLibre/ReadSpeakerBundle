@@ -78,6 +78,7 @@ class ReadSpeakerListener
         $response = $event->getResponse();
         $stack = $this->container->get('request_stack');
         $master = $stack->getMasterRequest();
+        if (strtolower($master->getRealMethod()) !== 'get') return;
         $url = $master->getUri();
         $content = $response->getContent();
         $rewrite = $this->container->get('claroline.config.platform_config_handler')->getParameter('readspeaker_url_edit_rewrite');
